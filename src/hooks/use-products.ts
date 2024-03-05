@@ -4,13 +4,13 @@ import { Product } from '@/types/product'
 import { useEffect, useState } from 'react'
 import { fetchProducts } from '../services/fetch-products'
 
-export function useProducts() {
+export function useProducts(quantity?: string) {
   const [isError, setIsError] = useState(false)
   const [products, setProducts] = useState<Product[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    fetchProducts()
+    fetchProducts(quantity)
       .then((data) => {
         setProducts(data)
       })
@@ -18,7 +18,7 @@ export function useProducts() {
         setIsError(true)
       })
       .finally(() => setIsLoading(false))
-  }, [])
+  }, [quantity])
 
   return { products, isError, isLoading }
 }

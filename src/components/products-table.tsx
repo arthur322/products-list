@@ -35,8 +35,11 @@ const tableColumns = [
   },
 ]
 
-export function ProductsTable() {
-  const { isLoading, isError, products } = useProducts()
+type ProductsTablePros = {
+  quantity?: string
+}
+export function ProductsTable({ quantity }: ProductsTablePros) {
+  const { isLoading, isError, products } = useProducts(quantity)
 
   if (isLoading) {
     return <h1 className="text-lg">Carregando produtos...</h1>
@@ -81,6 +84,12 @@ type TableRowProps = {
   product: Product
 }
 function TableRow({ product }: TableRowProps) {
+  const [qty, setQty] = useState(0)
+
+  const handleQtyChange = (qty: number) => {
+    setQty(qty)
+  }
+
   return (
     <tr className="h-14 border-b border-stone-300 text-left">
       {tableColumns.map(({ key, formatValue, component: Component, align }) => {
@@ -92,6 +101,8 @@ function TableRow({ product }: TableRowProps) {
             rowValue={product}
             formatter={formatValue}
             align={align}
+            quantity={qty}
+            onChangeQty={handleQtyChange}
           />
         )
       })}
@@ -129,7 +140,7 @@ function TableCellInfo({ value = '~', rowValue }: TableCellInfoProps) {
   )
 }
 
-function QntButton({
+function QtyButton({
   children,
   onClick,
 }: {
@@ -143,17 +154,23 @@ function QntButton({
   )
 }
 
-function TableCellUnityQuantity() {
-  const [qnt, setQnt] = useState(0)
+type TableCellUnityQuantity = TableCellProps & {
+  quantity: number
+  onChangeQty: (qty: number) => void
+}
+function TableCellUnityQuantity({
+  quantity,
+  onChangeQty,
+}: TableCellUnityQuantity) {
   return (
     <td className="p-4 text-stone-500">
       <div className="flex justify-end items-center gap-3">
-        {qnt.toString().padStart(2, '0')}{' '}
+        {quantity.toString().padStart(2, '0')}{' '}
         <div className="flex flex-col gap-0.5">
-          <QntButton onClick={() => setQnt((q) => q + 1)}>+</QntButton>
-          <QntButton onClick={() => setQnt((q) => Math.max(q - 1, 0))}>
+          <QtyButton onClick={() => onChangeQty(quantity + 1)}>+</QtyButton>
+          <QtyButton onClick={() => onChangeQty(Math.max(quantity - 1, 0))}>
             -
-          </QntButton>
+          </QtyButton>
         </div>
       </div>
     </td>
@@ -161,9 +178,10 @@ function TableCellUnityQuantity() {
 }
 
 type TableCellSubtotalProps = TableCellProps & {
-  quantity?: number
+  quantity: number
+  onChangeQty: (qty: number) => void
 }
-function TableCellSubtotal({ quantity = 0, rowValue }: TableCellSubtotalProps) {
+function TableCellSubtotal({ quantity, rowValue }: TableCellSubtotalProps) {
   const sum = quantity * rowValue.price
   return <td className="p-4 text-right">{formatCurrency(sum)}</td>
 }

@@ -4,7 +4,10 @@ import { Search } from '@/components/search'
 import { Footer } from '@/components/footer'
 import { ProductsTable } from '@/components/products-table'
 
-export default function Home() {
+type HomeProps = {
+  searchParams?: { quantity: string }
+}
+export default function Home({ searchParams }: HomeProps) {
   return (
     <>
       <div className="container mx-auto py-10 min-h-[calc(100vh-56px)]">
@@ -16,7 +19,7 @@ export default function Home() {
           <div className="w-[328px] mb-4">
             <Search />
           </div>
-          <ProductsTable />
+          <ProductsTable quantity={searchParams?.quantity} />
         </main>
       </div>
       <Footer />

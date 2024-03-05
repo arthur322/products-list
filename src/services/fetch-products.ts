@@ -1,5 +1,6 @@
-export async function fetchProducts() {
-  const response = await fetch('/api/products?quantity=10')
+export async function fetchProducts(quantity?: string) {
+  const params = quantity ? new URLSearchParams({ quantity }) : ''
+  const response = await fetch(`/api/products?${params.toString()}`)
 
   if (!response.ok) {
     const error = await response.text()
