@@ -1,6 +1,5 @@
 'use client'
 
-import { useProducts } from '../../hooks/use-products'
 import { formatCurrency } from '../../utils/format-currency'
 import { useProductsQuantities } from '@/hooks/use-products-quantities'
 import { TableRow } from './table-row'
@@ -9,6 +8,7 @@ import { TableCellUnityQuantity } from './table-cell-qty'
 import { TableCellSubtotal } from './table-cell-subtotal'
 import { TableHeader } from './table-header'
 import { TableTotal } from './table-total'
+import { Product } from '@/types/product'
 
 export const tableColumns = [
   { label: 'Material', key: 'name', component: TableCellInfo, align: 'center' },
@@ -36,24 +36,11 @@ export const tableColumns = [
 ]
 
 type ProductsTablePros = {
-  quantity?: string
+  products: Product[]
 }
-export function ProductsTable({ quantity }: ProductsTablePros) {
-  const { isLoading, isError, products } = useProducts(quantity)
+export function ProductsTable({ products }: ProductsTablePros) {
   const { productsQuantities, updateQuantities, totalAmount } =
     useProductsQuantities()
-
-  if (isLoading) {
-    return <h1 className="text-lg mt-8 text-center">Carregando produtos...</h1>
-  }
-
-  if (isError) {
-    return (
-      <h1 className="text-lg text-red-600">
-        Ocorreu um erro, tente novamente mais tarde.
-      </h1>
-    )
-  }
 
   return (
     <>

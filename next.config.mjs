@@ -2,9 +2,20 @@
 const nextConfig = {
   images: {
     remotePatterns: [
+      // Testing product images
       {
         protocol: 'https',
         hostname: 'loremflickr.com',
+        port: '',
+      },
+      {
+        protocol: 'https',
+        hostname: 'down-br.img.susercontent.com',
+        port: '',
+      },
+      {
+        protocol: 'https',
+        hostname: 'griffecompany.com.br',
         port: '',
       },
     ],

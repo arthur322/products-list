@@ -12,6 +12,7 @@ export function TableCellInfo({ value = '~', rowValue }: TableCellInfoProps) {
           src={rowValue.imageUrl}
           width={40}
           height={40}
+          quality={20}
           className="size-10 rounded"
         />
         <span>{value}</span>
