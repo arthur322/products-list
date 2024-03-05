@@ -33,7 +33,7 @@ function Row() {
 
 export function TableSkeleton() {
   return (
-    <div className="max-h-[55vh] overflow-y-auto animate-pulse">
+    <div className="max-h-[50vh] overflow-y-auto animate-pulse">
       <table className="w-full">
         <thead className="sticky top-0">
           <tr>

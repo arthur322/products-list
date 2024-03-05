@@ -44,7 +44,7 @@ export function ProductsTable({ products }: ProductsTablePros) {
 
   return (
     <>
-      <div className="max-h-[55vh] overflow-y-auto">
+      <div className="max-h-[50vh] overflow-y-auto">
         <table className="w-full">
           <thead className="sticky top-0">
             <tr>

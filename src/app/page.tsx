@@ -5,6 +5,7 @@ import { Products } from '@/components/products-table'
 import { Footer } from '@/components/footer'
 import { Suspense } from 'react'
 import { TableSkeleton } from '@/components/products-table/table-skeleton'
+import { PrimaryButton } from '@/components/primary-button'
 
 type HomeProps = {
   searchParams?: { quantity: string }
@@ -24,6 +25,9 @@ export default async function Home({ searchParams }: HomeProps) {
           <Suspense fallback={<TableSkeleton />}>
             <Products quantity={searchParams?.quantity} />
           </Suspense>
+          <div className="mt-10 flex justify-end">
+            <PrimaryButton>Próximo</PrimaryButton>
+          </div>
         </main>
       </div>
       <Footer />
