@@ -57,34 +57,32 @@ export function ProductsTable({ quantity }: ProductsTablePros) {
   }
 
   return (
-    <table className="w-full">
-      <thead>
-        <tr>
-          {tableColumns.map((column) => (
-            <TableHeader key={column.key} align={column.align}>
-              {column.label}
-            </TableHeader>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {products.map((product) => (
-          <TableRow
-            key={product.id}
-            product={product}
-            productQty={productsQuantities[product.id]?.quantity ?? 0}
-            onProductQtyChange={updateQuantities}
-          />
-        ))}
-      </tbody>
-      <tfoot>
-        <tr>
-          <td colSpan={tableColumns.length}>
-            <TableTotal total={totalAmount} />
-          </td>
-        </tr>
-      </tfoot>
-    </table>
+    <>
+      <div className="max-h-[55vh] overflow-y-auto">
+        <table className="w-full">
+          <thead className="sticky top-0">
+            <tr>
+              {tableColumns.map((column) => (
+                <TableHeader key={column.key} align={column.align}>
+                  {column.label}
+                </TableHeader>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {products.map((product) => (
+              <TableRow
+                key={product.id}
+                product={product}
+                productQty={productsQuantities[product.id]?.quantity ?? 0}
+                onProductQtyChange={updateQuantities}
+              />
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <TableTotal total={totalAmount} />
+    </>
   )
 }
 
