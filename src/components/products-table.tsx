@@ -1,10 +1,11 @@
 'use client'
 
+import { memo } from 'react'
+import Image from 'next/image'
 import { Product } from '@/types/product'
 import { useProducts } from '../hooks/use-products'
 import { formatCurrency } from '../utils/format-currency'
-import { useState } from 'react'
-import Image from 'next/image'
+import { useProductsQuantities } from '@/hooks/use-products-quantities'
 
 function generateAlign(align?: string) {
   return align ? `text-${align}` : ''
@@ -40,6 +41,8 @@ type ProductsTablePros = {
 }
 export function ProductsTable({ quantity }: ProductsTablePros) {
   const { isLoading, isError, products } = useProducts(quantity)
+  const { productsQuantities, updateQuantities, totalAmount } =
+    useProductsQuantities()
 
   if (isLoading) {
     return <h1 className="text-lg">Carregando produtos...</h1>
@@ -66,13 +69,18 @@ export function ProductsTable({ quantity }: ProductsTablePros) {
       </thead>
       <tbody>
         {products.map((product) => (
-          <TableRow key={product.id} product={product} />
+          <TableRow
+            key={product.id}
+            product={product}
+            productQty={productsQuantities[product.id]?.quantity ?? 0}
+            onProductQtyChange={updateQuantities}
+          />
         ))}
       </tbody>
       <tfoot>
         <tr>
           <td colSpan={tableColumns.length}>
-            <TableTotal total={0} />
+            <TableTotal total={totalAmount} />
           </td>
         </tr>
       </tfoot>
@@ -82,12 +90,16 @@ export function ProductsTable({ quantity }: ProductsTablePros) {
 
 type TableRowProps = {
   product: Product
+  productQty: number
+  onProductQtyChange: (product: Product, quantity: number) => void
 }
-function TableRow({ product }: TableRowProps) {
-  const [qty, setQty] = useState(0)
-
+const TableRow = memo(function TableRow({
+  product,
+  productQty,
+  onProductQtyChange,
+}: TableRowProps) {
   const handleQtyChange = (qty: number) => {
-    setQty(qty)
+    onProductQtyChange(product, qty)
   }
 
   return (
@@ -101,14 +113,14 @@ function TableRow({ product }: TableRowProps) {
             rowValue={product}
             formatter={formatValue}
             align={align}
-            quantity={qty}
+            quantity={productQty}
             onChangeQty={handleQtyChange}
           />
         )
       })}
     </tr>
   )
-}
+})
 
 type TableCellProps = {
   value?: string | number
